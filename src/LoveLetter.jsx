@@ -39,6 +39,8 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
     { text: "I would always, always choose you.", delay: 12.5, style: "emphasis" },
     { text: "You are my favourite feeling in this whole world.", delay: 13.6, style: "closing" },
     { text: "Yours, completely and forever 💕🌹", delay: 14.4, style: "signature" },
+    { text: "From", delay: 14.4, style: "signature" },
+    { text: "10/10", delay: 14.4, style: "emphasis" },
   ];
 
   // Floating heart particles

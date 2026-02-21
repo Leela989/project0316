@@ -68,7 +68,7 @@ const memories = [
   },
 ];
 
-const pages = ["Home", "Our Story", "A Letter From My Heart", "Finally ??"];
+const pages = ["Home", "The Journey", "A Letter From My Heart", "Finally ??"];
 
 const starField = Array.from({ length: 180 }, (_, i) => ({
   id: i,

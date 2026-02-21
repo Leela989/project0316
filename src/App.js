@@ -1166,13 +1166,6 @@ const lb = {
     display: "inline-block",
     animation: "musicPulse 1.4s ease-in-out infinite",
   },
-  nowPlayingText: {
-    fontFamily: "'Outfit', sans-serif",
-    fontSize: 10,
-    color: "rgba(255,170,195,0.65)",
-    letterSpacing: 2.5,
-    textTransform: "uppercase",
-  },
   hint: {
     color: "rgba(255,180,200,0.3)",
     fontSize: 11,

@@ -15,7 +15,7 @@ const memories = [
   {
     id: 1,
     src: photo1,
-    caption: "The First Look 👀",
+    caption: "My best memory",
     note: "You changed the whole room without even trying.",
     rotate: "-4deg",
     color: "rgba(255,100,150,0.25)",
@@ -24,7 +24,7 @@ const memories = [
   {
     id: 2,
     src: photo2,
-    caption: "Our First Conversation 💬",
+    caption: "First Love",
     note: "I was nervous. You were effortlessly you.",
     rotate: "3deg",
     color: "rgba(160,100,255,0.25)",
@@ -33,7 +33,7 @@ const memories = [
   {
     id: 3,
     src: photo3,
-    caption: "The Realisation 🥺",
+    caption: "Love has no bounds",
     note: "It has to be you. Only ever you.",
     rotate: "-2deg",
     color: "rgba(60,180,255,0.25)",
@@ -51,7 +51,7 @@ const memories = [
   {
     id: 5,
     src: photo5,
-    caption: "Right Now 💍",
+    caption: "I love you",
     note: "The moment I decided — it's always going to be you.",
     rotate: "-3deg",
     color: "rgba(60,220,180,0.25)",
@@ -60,7 +60,7 @@ const memories = [
   {
     id: 6,
     src: photo6,
-    caption: "Right Now 💍",
+    caption: "I will walk with you even the path is hard.",
     note: "The moment I decided — it's always going to be you.",
     rotate: "-3deg",
     color: "rgba(60,220,180,0.25)",
@@ -68,7 +68,6 @@ const memories = [
   },
 ];
 
-// ─── Background data ──────────────────────────────────────────────────────────
 const pages = ["Home", "Our Story", "A Letter From My Heart", "Finally ??"];
 
 const starField = Array.from({ length: 180 }, (_, i) => ({
@@ -116,7 +115,6 @@ const floatingOrbs = Array.from({ length: 6 }, (_, i) => ({
   ][i],
 }));
 
-// ─── Lightbox floating hearts ─────────────────────────────────────────────────
 const LightboxHearts = () => {
   const [lHearts, setLHearts] = useState([]);
   useEffect(() => {
@@ -156,12 +154,9 @@ const LightboxHearts = () => {
   );
 };
 
-// ─── Cinematic Lightbox ───────────────────────────────────────────────────────
-// Receives bgAudioRef so it can pause/resume background music
 const Lightbox = ({ memory, onClose, onPrev, onNext, total, index, bgAudioRef }) => {
   const photoAudioRef = useRef(null);
 
-  // Whenever the memory (photo) changes, switch songs
   useEffect(() => {
     const audio = photoAudioRef.current;
     if (!audio) return;
@@ -172,7 +167,6 @@ const Lightbox = ({ memory, onClose, onPrev, onNext, total, index, bgAudioRef })
     audio.play().catch(() => {});
   }, [memory.song]);
 
-  // On mount: pause bg music and start photo song
   useEffect(() => {
     if (bgAudioRef.current) bgAudioRef.current.pause();
     const audio = photoAudioRef.current;
@@ -183,7 +177,6 @@ const Lightbox = ({ memory, onClose, onPrev, onNext, total, index, bgAudioRef })
       audio.play().catch(() => {});
     }
     return () => {
-      // On unmount (lightbox closed): stop photo song, resume bg
       if (audio) {
         audio.pause();
         audio.src = "";
@@ -572,7 +565,7 @@ export default function SureshProposal() {
             </p>
             <h2 style={styles.pageTitle}>Every Moment With You</h2>
             <p style={styles.gallerySubtitle}>
-              Six little memories. Each one a whole universe. 🌙<br />
+              Little memories. Each one a whole universe. 🌙<br />
               <span style={styles.galleryHint}>Click any photo to relive the moment with its song 🎵✨</span>
             </p>
 

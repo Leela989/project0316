@@ -1161,14 +1161,6 @@ const lb = {
     transition: "all 0.3s",
     cursor: "pointer",
   },
-  nowPlaying: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 7,
-    padding: "9px 0 2px",
-    background: "rgba(15,8,25,0.98)",
-  },
   musicNote: {
     fontSize: 13,
     display: "inline-block",

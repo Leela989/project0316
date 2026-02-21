@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // ─── Love Letter Page Component ───────────────────────────────────────────────
 // Drop this as a new page in your proposal project.
@@ -10,7 +10,6 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
   const letterAudioRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [lines, setLines] = useState([]);
-  const [showSeal, setShowSeal] = useState(false);
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
   const [letterReady, setLetterReady] = useState(false);
   const [particles, setParticles] = useState([]);

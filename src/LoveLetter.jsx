@@ -82,7 +82,8 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
 
   // Audio: pause bg music, play song1
   useEffect(() => {
-    if (bgAudioRef?.current) bgAudioRef.current.pause();
+    const audio_bg = bgAudioRef.current;
+    if (bgAudioRef?.current) audio_bg.pause();
     const audio = letterAudioRef.current;
     if (audio) {
       audio.volume = 0.45;
@@ -96,7 +97,7 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
         bgAudioRef.current.play().catch(() => {});
       }
     };
-  }, []);
+  }, [letterLines, bgAudioRef]);
 
   const getLineStyle = (style) => {
     const base = {

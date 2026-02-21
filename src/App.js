@@ -168,7 +168,8 @@ const Lightbox = ({ memory, onClose, onPrev, onNext, total, index, bgAudioRef })
   }, [memory.song]);
 
   useEffect(() => {
-    if (bgAudioRef.current) bgAudioRef.current.pause();
+    const audio1 = bgAudioRef.current;
+    if (bgAudioRef.current) audio1.pause();
     const audio = photoAudioRef.current;
     if (audio) {
       audio.src = memory.song;
@@ -181,9 +182,9 @@ const Lightbox = ({ memory, onClose, onPrev, onNext, total, index, bgAudioRef })
         audio.pause();
         audio.src = "";
       }
-      if (bgAudioRef.current) {
-        bgAudioRef.current.volume = 0.6;
-        bgAudioRef.current.play().catch(() => {});
+      if (audio1) {
+        audio1.volume = 0.6;
+        audio1.play().catch(() => {});
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,11 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 
-// ─── Love Letter Page Component ───────────────────────────────────────────────
-// Drop this as a new page in your proposal project.
-// bgAudioRef is passed from the parent (SureshProposal) so the main music
-// is paused while this page is active and resumed when leaving.
-// song1 plays automatically when this page opens.
-
 export default function LoveLetter({ onBack, bgAudioRef }) {
   const letterAudioRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -70,7 +64,8 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
-  // Stagger each line appearing
+  // FIX 1 — letterLines is stable (defined in render but never changes),
+  // so we move it into a ref OR just disable the rule for this one effect.
   useEffect(() => {
     if (!visible) return;
     letterLines.forEach((_, i) => {
@@ -78,26 +73,30 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
         setLines(prev => [...prev, i]);
       }, letterLines[i].delay * 1000);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
-  // Audio: pause bg music, play song1
+  // FIX 2 — copy both refs to local variables inside the effect
   useEffect(() => {
-    const audio_bg = bgAudioRef.current;
-    if (bgAudioRef?.current) audio_bg.pause();
-    const audio = letterAudioRef.current;
+    const audioBg = bgAudioRef.current;   // ← copied here
+    const audio = letterAudioRef.current; // ← copied here
+
+    if (audioBg) audioBg.pause();
+
     if (audio) {
       audio.volume = 0.45;
       audio.loop = true;
       audio.play().catch(() => {});
     }
+
     return () => {
       if (audio) { audio.pause(); audio.currentTime = 0; }
-      if (bgAudioRef?.current) {
-        bgAudioRef.current.volume = 0.6;
-        bgAudioRef.current.play().catch(() => {});
+      if (audioBg) {                        // ← use local copy, not .current
+        audioBg.volume = 0.6;
+        audioBg.play().catch(() => {});
       }
     };
-  }, [letterLines, bgAudioRef]);
+  }, [bgAudioRef]); // FIX 3 — bgAudioRef added as dependency
 
   const getLineStyle = (style) => {
     const base = {
@@ -135,13 +134,11 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
         <source src="/music/song8.mp3" type="audio/mp3" />
       </audio>
 
-      {/* Deep atmospheric background */}
       <div style={s.bgBase} />
       <div style={s.bgGlow1} />
       <div style={s.bgGlow2} />
       <div style={s.bgGlow3} />
 
-      {/* Floating particles */}
       {particles.map(p => (
         <div key={p.id} style={{
           position: "fixed", bottom: -20, left: `${p.left}%`,
@@ -151,14 +148,10 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
         }}>{p.emoji}</div>
       ))}
 
-      {/* Back button */}
       {letterReady && (
-        <button style={s.backBtn} onClick={onBack}>
-          ← Back
-        </button>
+        <button style={s.backBtn} onClick={onBack}>← Back</button>
       )}
 
-      {/* Now playing pill */}
       {letterReady && (
         <div style={s.nowPlaying}>
           <span style={s.musicDot} />
@@ -166,7 +159,6 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
         </div>
       )}
 
-      {/* Envelope animation */}
       {!letterReady && (
         <div style={s.envelopeWrap}>
           <div style={{ ...s.envelope, transform: envelopeOpen ? "scale(1.08)" : "scale(1)", opacity: envelopeOpen ? 0 : 1, transition: "all 1.2s ease" }}>
@@ -184,10 +176,8 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
         </div>
       )}
 
-      {/* The actual letter */}
       {letterReady && (
         <div style={s.letterWrap}>
-          {/* Decorative header */}
           <div style={s.letterHeader}>
             <div style={s.headerLine} />
             <span style={s.headerHeart}>💌</span>
@@ -196,10 +186,8 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
 
           <div style={s.salutation}>My Suresh,</div>
 
-          {/* Letter lines */}
           <div style={s.linesWrap}>
             {letterLines.map((line, i) => {
-              // Group lines into paragraphs
               const isGroupStart = [0, 2, 8, 14, 18, 22].includes(i);
               return (
                 <div key={i}>
@@ -216,7 +204,6 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
             })}
           </div>
 
-          {/* Decorative footer */}
           {lines.length >= letterLines.length - 1 && (
             <div style={s.letterFooter}>
               <div style={s.footerDots}>
@@ -272,20 +259,12 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
   );
 }
 
-// ─── Styles ───────────────────────────────────────────────────────────────────
 const s = {
   root: {
-    minHeight: "100vh",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    overflowX: "hidden",
-    overflowY: "auto",
-    position: "relative",
-    fontFamily: "'Cormorant Garamond', serif",
-    paddingBottom: 80,
+    minHeight: "100vh", width: "100%",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start",
+    overflowX: "hidden", overflowY: "auto", position: "relative",
+    fontFamily: "'Cormorant Garamond', serif", paddingBottom: 80,
   },
   bgBase: {
     position: "fixed", inset: 0,
@@ -315,92 +294,60 @@ const s = {
   },
   backBtn: {
     position: "fixed", top: 24, left: 24,
-    background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(255,150,180,0.2)",
-    color: "rgba(255,180,200,0.7)",
-    padding: "8px 18px", borderRadius: 50,
-    fontSize: 12, cursor: "pointer",
-    fontFamily: "'Cormorant Garamond', serif",
-    fontStyle: "italic", letterSpacing: 1,
-    backdropFilter: "blur(10px)", zIndex: 100,
-    transition: "all 0.3s ease",
-    animation: "fadeSlideIn 0.6s ease forwards",
+    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,150,180,0.2)",
+    color: "rgba(255,180,200,0.7)", padding: "8px 18px", borderRadius: 50,
+    fontSize: 12, cursor: "pointer", fontFamily: "'Cormorant Garamond', serif",
+    fontStyle: "italic", letterSpacing: 1, backdropFilter: "blur(10px)", zIndex: 100,
+    transition: "all 0.3s ease", animation: "fadeSlideIn 0.6s ease forwards",
   },
   nowPlaying: {
     position: "fixed", top: 24, right: 24,
     display: "flex", alignItems: "center", gap: 8,
-    background: "rgba(255,50,100,0.08)",
-    border: "1px solid rgba(255,100,140,0.2)",
-    padding: "7px 16px", borderRadius: 50,
-    backdropFilter: "blur(10px)", zIndex: 100,
-    animation: "fadeSlideIn 0.6s ease 0.3s forwards",
-    opacity: 0, animationFillMode: "forwards",
+    background: "rgba(255,50,100,0.08)", border: "1px solid rgba(255,100,140,0.2)",
+    padding: "7px 16px", borderRadius: 50, backdropFilter: "blur(10px)", zIndex: 100,
+    animation: "fadeSlideIn 0.6s ease 0.3s forwards", opacity: 0, animationFillMode: "forwards",
   },
   musicDot: {
-    width: 7, height: 7, borderRadius: "50%",
-    background: "#ff6b8a",
+    width: 7, height: 7, borderRadius: "50%", background: "#ff6b8a",
     boxShadow: "0 0 8px rgba(255,107,138,0.8)",
-    animation: "musicBlink 1.2s ease-in-out infinite",
-    flexShrink: 0,
+    animation: "musicBlink 1.2s ease-in-out infinite", flexShrink: 0,
   },
   nowPlayingText: {
-    fontFamily: "'Cormorant Garamond', serif",
-    fontSize: 12, color: "rgba(255,160,190,0.7)",
-    fontStyle: "italic", letterSpacing: 1,
+    fontFamily: "'Cormorant Garamond', serif", fontSize: 12,
+    color: "rgba(255,160,190,0.7)", fontStyle: "italic", letterSpacing: 1,
   },
-
-  // Envelope
   envelopeWrap: {
     position: "fixed", inset: 0,
-    display: "flex", flexDirection: "column",
-    alignItems: "center", justifyContent: "center",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
     zIndex: 50,
   },
-  envelope: {
-    width: 220, height: 160,
-    animation: "envPulse 2s ease-in-out infinite",
-  },
+  envelope: { width: 220, height: 160, animation: "envPulse 2s ease-in-out infinite" },
   envBody: {
     width: "100%", height: "100%",
     background: "linear-gradient(145deg, rgba(40,10,30,0.95), rgba(20,5,20,0.98))",
-    border: "1px solid rgba(255,100,140,0.3)",
-    borderRadius: 8, position: "relative",
-    display: "flex", alignItems: "center", justifyContent: "center",
+    border: "1px solid rgba(255,100,140,0.3)", borderRadius: 8,
+    position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
     boxShadow: "0 0 50px rgba(255,60,120,0.3), inset 0 0 30px rgba(255,50,100,0.05)",
   },
   envFlap: {
-    position: "absolute", top: 0, left: 0, right: 0,
-    height: "50%",
+    position: "absolute", top: 0, left: 0, right: 0, height: "50%",
     background: "linear-gradient(to bottom, rgba(255,80,130,0.08), transparent)",
-    borderBottom: "1px solid rgba(255,100,140,0.15)",
-    borderRadius: "8px 8px 0 0",
+    borderBottom: "1px solid rgba(255,100,140,0.15)", borderRadius: "8px 8px 0 0",
   },
-  envLines: {
-    display: "flex", flexDirection: "column", gap: 8, width: "55%",
-  },
-  envLine: {
-    height: 1, background: "rgba(255,150,180,0.2)", borderRadius: 2,
-  },
+  envLines: { display: "flex", flexDirection: "column", gap: 8, width: "55%" },
+  envLine: { height: 1, background: "rgba(255,150,180,0.2)", borderRadius: 2 },
   envSeal: {
-    position: "absolute",
-    fontSize: 36,
+    position: "absolute", fontSize: 36,
     filter: "drop-shadow(0 0 12px rgba(255,100,140,0.8))",
     animation: "heartPop 2s ease-in-out infinite alternate",
   },
   envHint: {
-    marginTop: 24,
-    fontFamily: "'Cormorant Garamond', serif",
-    fontStyle: "italic",
-    fontSize: 14,
-    color: "rgba(255,150,180,0.5)",
-    letterSpacing: 2,
+    marginTop: 24, fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic",
+    fontSize: 14, color: "rgba(255,150,180,0.5)", letterSpacing: 2,
     animation: "musicBlink 2s ease-in-out infinite",
   },
-
-  // Letter
   letterWrap: {
-    position: "relative", zIndex: 10,
-    width: "100%", maxWidth: 680,
+    position: "relative", zIndex: 10, width: "100%", maxWidth: 680,
     padding: "100px 36px 60px",
     display: "flex", flexDirection: "column", alignItems: "center",
   },
@@ -414,33 +361,20 @@ const s = {
     background: "linear-gradient(90deg, transparent, rgba(255,107,138,0.4), transparent)",
   },
   headerHeart: {
-    fontSize: 28,
-    filter: "drop-shadow(0 0 12px rgba(255,100,140,0.7))",
-    animation: "heartPop 2s ease infinite alternate",
-    display: "inline-block",
+    fontSize: 28, filter: "drop-shadow(0 0 12px rgba(255,100,140,0.7))",
+    animation: "heartPop 2s ease infinite alternate", display: "inline-block",
   },
   salutation: {
-    fontFamily: "'Cormorant Garamond', serif",
-    fontSize: "clamp(22px,4vw,34px)",
-    fontStyle: "italic",
-    fontWeight: 700,
-    color: "#ffccd5",
-    marginBottom: 28,
-    textShadow: "0 0 30px rgba(255,120,160,0.5)",
-    textAlign: "center",
-    animation: "fadeSlideIn 0.8s ease 0.2s forwards",
-    opacity: 0, animationFillMode: "forwards",
+    fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px,4vw,34px)",
+    fontStyle: "italic", fontWeight: 700, color: "#ffccd5", marginBottom: 28,
+    textShadow: "0 0 30px rgba(255,120,160,0.5)", textAlign: "center",
+    animation: "fadeSlideIn 0.8s ease 0.2s forwards", opacity: 0, animationFillMode: "forwards",
     letterSpacing: 1,
   },
   linesWrap: {
-    display: "flex", flexDirection: "column",
-    alignItems: "center", width: "100%", gap: 2,
+    display: "flex", flexDirection: "column", alignItems: "center", width: "100%", gap: 2,
   },
   spacer: { height: 20 },
-  letterFooter: {
-    marginTop: 40, textAlign: "center",
-  },
-  footerDots: {
-    display: "flex", gap: 12, justifyContent: "center", alignItems: "center",
-  },
+  letterFooter: { marginTop: 40, textAlign: "center" },
+  footerDots: { display: "flex", gap: 12, justifyContent: "center", alignItems: "center" },
 };

@@ -8,36 +8,61 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
   const [letterReady, setLetterReady] = useState(false);
   const [particles, setParticles] = useState([]);
 
-  const letterLines = [
-    { text: "I don't need a thousand words to tell you what you mean to me.", delay: 0, style: "opening" },
-    { text: "I just need you to feel this —", delay: 0.3, style: "opening-sub" },
-    { text: "I don't know exactly when it happened.", delay: 1.2, style: "body" },
-    { text: "There was no big moment, no lightning strike.", delay: 1.6, style: "body" },
-    { text: "One day I just looked at you and realised —", delay: 2.1, style: "body" },
-    { text: "my heart had already decided.", delay: 2.5, style: "emphasis" },
-    { text: "Without asking me. Without warning me.", delay: 3.0, style: "body" },
-    { text: "It had already chosen you, completely.", delay: 3.5, style: "emphasis" },
-    { text: "I think about the small things the most.", delay: 4.5, style: "body" },
-    { text: "Not the grand moments — the small ones.", delay: 5.0, style: "body" },
-    { text: "The way you talk.", delay: 5.5, style: "small" },
-    { text: "The way you go quiet sometimes and your eyes say everything your mouth doesn't.", delay: 6.0, style: "small" },
-    { text: "The way you don't even realise how deeply you affect the people around you.", delay: 6.6, style: "small" },
-    { text: "I notice all of it. Every single thing.", delay: 7.2, style: "emphasis" },
-    { text: "Suresh, I love you in a way that frightens me sometimes.", delay: 8.2, style: "deep" },
-    { text: "Because it's real.", delay: 8.8, style: "deep-small" },
-    { text: "Because it's deep.", delay: 9.2, style: "deep-small" },
-    { text: "Because losing it would break something in me that could never be fixed again.", delay: 9.7, style: "deep" },
-    { text: "And if I had to choose again —", delay: 10.8, style: "body" },
-    { text: "a thousand times over, in a thousand different lives —", delay: 11.3, style: "body" },
-    { text: "I would find you every single time.", delay: 11.9, style: "emphasis" },
-    { text: "I would always, always choose you.", delay: 12.5, style: "emphasis" },
-    { text: "You are my favourite feeling in this whole world.", delay: 13.6, style: "closing" },
-    { text: "Yours, completely and forever 💕🌹", delay: 14.4, style: "signature" },
-    { text: "From", delay: 14.4, style: "signature" },
-    { text: "10/10", delay: 14.4, style: "emphasis" },
-  ];
+const letterLines = [
+  { text: "ప్రేమించానని చెప్పడానికి రకరకాల మాటలు అవసరం లేదు.", delay: 0, style: "opening" },
+  { text: "ఒక చూపు, మన కోసం వాళ్లు చేసే పనులు చాలు.", delay: 0.3, style: "opening-sub" },
+  { text: "మాటలే ప్రేమకి అవసరం అయితే —", delay: 1.2, style: "body" },
+  { text: "మనుషులు తప్ప భూమి మీద ఇంకే జీవికి ప్రేమ లేనట్టే.", delay: 1.6, style: "body" },
 
-  // Floating heart particles
+  { text: "ప్రపంచంలో అన్నింటికంటే స్వచ్ఛమైన feeling ప్రేమే.", delay: 3.2, style: "emphasis" },
+  { text: "దానికి దూరం–దగ్గరతో సంబంధం లేదు…", delay: 3.7, style: "body" },
+  { text: "నిజానికి పెళ్లితో కూడా సంబంధం లేదు.", delay: 4.2, style: "body" },
+  { text: "ఒక్కోసారి మాట్లాడకుండా పక్కన కూర్చోవడమే సంతోషం అవుతుంది,", delay: 4.6, style: "body" },
+
+  { text: "ఎక్కడ ఉన్నా, ఎలా ఉన్నా,", delay: 5.6, style: "body" },
+  { text: "జీవితాంతం మర్చిపోలేనిది ప్రేమ.", delay: 6.1, style: "emphasis" },
+
+  { text: "\"ఈ ప్రేమ ఎలాంటి మనిషినైనా మార్చేస్తుంది\" అంటే నేను నవ్వుకున్నాను…", delay: 7.0, style: "body" },
+  { text: "కానీ ఈరోజు నా వరకూ వచ్చాక అర్థమైంది.", delay: 7.6, style: "body" },
+  { text: "ఎక్కడా లేని సంతోషాన్ని, పట్టలేనంత బాధను కూడా", delay: 8.9, style: "body" },
+  { text: "ప్రేమ మాత్రమే ఇవ్వగలదని తెలిసింది.", delay: 9.4, style: "emphasis" },
+
+  { text: "దేవుడికే తప్పలేదు ప్రేమ నుండి విముక్తి", delay: 10.8, style: "body" },
+  { text: "మరి మనం ఎంత?", delay: 13.4, style: "emphasis" },
+  { text: "దాని అర్థం ప్రేమ బలహీనత కాదు —", delay: 10.8, style: "body" },
+  { text: "అది మనిషిలో ఉన్న అతి పెద్ద నిజం.", delay: 11.2, style: "emphasis" },
+  { text: "ఎలాంటి నిజం అంటే —", delay: 11.7, style: "body" },
+  { text: "బ్రతికి ఉండగానే మనల్ని దహించేంత నిజం.", delay: 12.1, style: "emphasis" },
+  { text: "అందరూ మర్చిపో అని చెప్తారు,", delay: 12.7, style: "body" },
+  { text: "కానీ నేను ఎప్పుడూ మర్చిపోవడానికి try చేయలేదు.", delay: 13.1, style: "body" },
+  { text: "ఎందుకంటే —", delay: 13.6, style: "body" },
+  { text: "అది నా వల్ల కాదని నాకు తెలుసు.", delay: 14.0, style: "emphasis" },
+
+  { text: "ప్రేమించిన వాళ్లతో ఇంతేనేమో —", delay: 14.4, style: "body" },
+  { text: "time ఇలానే గడిచిపోతుంది.", delay: 14.8, style: "body" },
+  { text: "ఎంత మాట్లాడినా, ఎంత చెప్పినా —", delay: 15.3, style: "body" },
+  { text: "ఇంకా ఏదో మిగిలిపోతుందనిపిస్తుంది.", delay: 15.7, style: "emphasis" },
+  { text: "ఇలా జరుగుతుందని ముందే తెలిసి ఉంటే —", delay: 16.3, style: "body" },
+  { text: "మనల్ని కలవకుండా చేసేవాడు ఆ దేవుడు.", delay: 16.7, style: "emphasis" },
+  { text: "ఎందుకంటే —", delay: 16.9, style: "body" },
+  { text: "ఈ గాయం ఏం చేస్తే మానుతుందో నాకు తెలీదు.", delay: 17.2, style: "emphasis" },
+  { text: "కొన్ని కలయికలు రాయబడి ఉంటాయేమో —", delay: 17.4, style: "body" },
+  { text: "అందుకే ఆపడం ఆయన వల్ల కూడా కాలేదు.", delay: 17.6, style: "emphasis" },
+
+  { text: "మరి ఎక్కువ మాట్లాడి విసిగించను…", delay: 18.0, style: "closing" },
+  { text: "చివరగా ఒక్క మాట —", delay: 18.2, style: "closing" },
+  { text: "వేయి మాటలు చెప్పగలను,", delay: 18.6, style: "body" },
+  { text: "కానీ ఈ మాట ముందు అన్నీ చిన్నవే…", delay: 19.0, style: "body" },
+  { text: "I LOVE YOU 💛", delay: 19.8, style: "emphasis" },
+  { text: "అప్పుడు, ఇప్పుడు, ఎప్పుడూ కూడా.", delay: 20.6, style: "emphasis" },
+  { text: "నా నుదిటిన రాసిన అదృష్టం నేనో కాదో తెలీదు", delay: 21.4, style: "closing" },
+  { text: "నా గుండెలో రాసిన పేరు మాత్రం నీదే.", delay: 22.0, style: "emphasis" },
+  { text: "ప్రేమతో,", delay: 22.7, style: "signature" },
+  { text: "ఇట్లు", delay: 23.1, style: "emphasis" },
+  { text: "10/10", delay: 23.1, style: "signature" },
+
+];
+
   useEffect(() => {
     const iv = setInterval(() => {
       if (!letterReady) return;
@@ -64,8 +89,6 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
-  // FIX 1 — letterLines is stable (defined in render but never changes),
-  // so we move it into a ref OR just disable the rule for this one effect.
   useEffect(() => {
     if (!visible) return;
     letterLines.forEach((_, i) => {
@@ -76,10 +99,9 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
-  // FIX 2 — copy both refs to local variables inside the effect
   useEffect(() => {
-    const audioBg = bgAudioRef.current;   // ← copied here
-    const audio = letterAudioRef.current; // ← copied here
+    const audioBg = bgAudioRef.current;
+    const audio = letterAudioRef.current;
 
     if (audioBg) audioBg.pause();
 
@@ -91,12 +113,12 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
 
     return () => {
       if (audio) { audio.pause(); audio.currentTime = 0; }
-      if (audioBg) {                        // ← use local copy, not .current
+      if (audioBg) {
         audioBg.volume = 0.6;
         audioBg.play().catch(() => {});
       }
     };
-  }, [bgAudioRef]); // FIX 3 — bgAudioRef added as dependency
+  }, [bgAudioRef]);
 
   const getLineStyle = (style) => {
     const base = {
@@ -131,7 +153,7 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
   return (
     <div style={s.root}>
       <audio ref={letterAudioRef} loop preload="auto">
-        <source src="/music/song8.mp3" type="audio/mp3" />
+        <source src="/music/song50.mp3" type="audio/mp3" />
       </audio>
 
       <div style={s.bgBase} />
@@ -155,7 +177,7 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
       {letterReady && (
         <div style={s.nowPlaying}>
           <span style={s.musicDot} />
-          <span style={s.nowPlayingText}>🎵 Playing your song</span>
+          <span style={s.nowPlayingText}>I Love You...</span>
         </div>
       )}
 
@@ -184,11 +206,10 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
             <div style={s.headerLine} />
           </div>
 
-          <div style={s.salutation}>My Suresh,</div>
 
           <div style={s.linesWrap}>
             {letterLines.map((line, i) => {
-              const isGroupStart = [0, 2, 8, 14, 18, 22].includes(i);
+              const isGroupStart = [0, 2, 4, 9, 13, 15].includes(i);
               return (
                 <div key={i}>
                   {isGroupStart && i !== 0 && <div style={s.spacer} />}
@@ -207,7 +228,7 @@ export default function LoveLetter({ onBack, bgAudioRef }) {
           {lines.length >= letterLines.length - 1 && (
             <div style={s.letterFooter}>
               <div style={s.footerDots}>
-                {["💕","🌹","💕","🌹","💕"].map((e, i) => (
+                {["💕","💕","💕"].map((e, i) => (
                   <span key={i} style={{
                     fontSize: 14,
                     animation: `heartPop 1.5s ease ${i * 0.15}s infinite alternate`,
